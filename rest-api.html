@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REST API e Integração com Java</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>REST API e Integração com Java</h1>
+        <p>Página com a informação que recolhi durante a pesquisa, com exemplos práticos e integração front-end/back-end</p>
+    </header>
+    
+<div class="back-button">
+    <a href="index.html">← Voltar à Página Inicial</a>
+</div>
+
+    <main>
+        <section id="teoria">
+            <h2>O que é uma REST API?</h2>
+            <p>
+                REST (Representational State Transfer) é um estilo de arquitetura para criar serviços web escaláveis. 
+                Uma REST API permite que aplicações se comuniquem via HTTP usando métodos como:
+            </p>
+            <ul>
+                <li><strong>GET</strong>: Serve para recuperar os dados do servidor.</li>
+                <li><strong>POST</strong>: Envia dados para criar um recurso.</li>
+                <li><strong>PUT</strong>: Atualiza um recurso existente.</li>
+                <li><strong>DELETE</strong>: Remove um recurso.</li>
+            </ul>
+            <p>As APIs REST utilizam normalmente JSON ou XML para troca de dados.</p>
+        </section>
+
+        <section id="backend">
+            <h2>Integração de Back-end com Java</h2>
+            <p>Em Java, as REST APIs podem ser criadas usando frameworks como <strong>Spring Boot</strong> ou <strong>JAX-RS</strong>.</p>
+            
+            <h3>Exemplo de código com Spring Boot</h3>
+            <pre>
+<code>
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    private List&lt;String&gt; users = new ArrayList&lt;&gt;(
+        Arrays.asList("Alice", "Bob", "Carlos")
+    );
+
+    // GET: Listar todos os usuários
+    @GetMapping
+    public List&lt;String&gt; getUsers() {
+        return users;
+    }
+
+    // POST: Adicionar novo usuário
+    @PostMapping
+    public String addUser(@RequestBody String name) {
+        users.add(name);
+        return "Usuário adicionado: " + name;
+    }
+
+    // DELETE: Remover usuário
+    @DeleteMapping("/{name}")
+    public String deleteUser(@PathVariable String name) {
+        users.remove(name);
+        return "Usuário removido: " + name;
+    }
+}
+</code>
+            </pre>
+            <p>Este controlador simples cria endpoints para manipulação de usuários via JSON.</p>
+        </section>
+
+        <section id="frontend">
+            <h2>Consumindo uma REST API no Front-end</h2>
+            <p>Podemos usar JavaScript (fetch API) para consumir os endpoints criados no back-end Java.</p>
+
+            <h3>Exemplo em JavaScript</h3>
+            <pre>
+<code>
+const apiUrl = "http://localhost:8080/api/users";
+
+// GET - Listar usuários
+fetch(apiUrl)
+    .then(response =&gt; response.json())
+    .then(data =&gt; console.log("Usuários:", data));
+
+// POST - Adicionar usuário
+fetch(apiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify("Daniel")
+})
+.then(response =&gt; response.text())
+.then(msg =&gt; console.log(msg));
+
+// DELETE - Remover usuário
+fetch(`${apiUrl}/Alice`, { method: "DELETE" })
+    .then(response =&gt; response.text())
+    .then(msg =&gt; console.log(msg));
+</code>
+            </pre>
+            <p>Com esta abordagem, podemos integrar o front-end ao back-end de forma limpa e escalável.</p>
+        </section>
+
+        <section id="boas-praticas">
+            <h2>Boas práticas ao usar REST API com Java</h2>
+            <ul>
+                <li>Use <strong>HTTP status codes</strong> corretos (200, 201, 404, 500, etc.).</li>
+                <li>Padronize os endpoints (ex: /api/users, /api/products).</li>
+                <li>Use <strong>JSON</strong> como formato de dados principal.</li>
+                <li>Implemente tratamento de erros e validação de dados.</li>
+                <li>Segurança: autenticação via tokens (JWT) e HTTPS.</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
