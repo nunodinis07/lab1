@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Piadas com API</title>
+</head>
+<body>
+    <h1>Piadas Aleatórias com API</h1>
+    <p>Clique no botão abaixo para ver uma piada nova 😆</p>
+
+    <button id="btn">Mostrar piada</button>
+    <p id="piada"></p>
+
+    <p><a href="index.html">⬅️ Voltar à página inicial</a></p>
+
+    <script>
+        document.getElementById('btn').addEventListener('click', () => {
+            fetch('https://v2.jokeapi.dev/joke/Any?lang=pt')
+                .then(response => response.json())
+                .then(data => {
+                    let texto = data.type === 'single'
+                        ? data.joke
+                        : `${data.setup} ... ${data.delivery}`;
+                    document.getElementById('piada').innerText = texto;
+                })
+                .catch(() => {
+                    document.getElementById('piada').innerText = 'Erro ao carregar piada 😅';
+                });
+        });
+    </script>
+</body>
+</html>
